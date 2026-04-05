@@ -19,6 +19,10 @@ namespace AcmeGlobalCollege.Web.Data
         public DbSet<FacultyCourseAssignment> FacultyCourseAssignments { get; set; }
         public DbSet<CourseEnrolment> CourseEnrolments { get; set; }
         public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<AssignmentResult> AssignmentResults { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamResult> ExamResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,8 +41,8 @@ namespace AcmeGlobalCollege.Web.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<StudentProfile>()
-                   .HasIndex(s => s.StudentNumber)
-                   .IsUnique();
+                .HasIndex(s => s.StudentNumber)
+                .IsUnique();
 
             builder.Entity<StudentProfile>()
                 .HasOne(s => s.IdentityUser)
@@ -81,6 +85,42 @@ namespace AcmeGlobalCollege.Web.Data
                 .WithMany(e => e.AttendanceRecords)
                 .HasForeignKey(a => a.CourseEnrolmentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Assignment>()
+                .HasOne(a => a.Course)
+                .WithMany(c => c.Assignments)
+                .HasForeignKey(a => a.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<AssignmentResult>()
+                .HasOne(ar => ar.Assignment)
+                .WithMany(a => a.AssignmentResults)
+                .HasForeignKey(ar => ar.AssignmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<AssignmentResult>()
+                .HasOne(ar => ar.StudentProfile)
+                .WithMany(s => s.AssignmentResults)
+                .HasForeignKey(ar => ar.StudentProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Exam>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Exams)
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ExamResult>()
+                .HasOne(er => er.Exam)
+                .WithMany(e => e.ExamResults)
+                .HasForeignKey(er => er.ExamId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ExamResult>()
+                .HasOne(er => er.StudentProfile)
+                .WithMany(s => s.ExamResults)
+                .HasForeignKey(er => er.StudentProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

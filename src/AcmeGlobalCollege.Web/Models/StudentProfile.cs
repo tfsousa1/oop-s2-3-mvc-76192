@@ -49,6 +49,7 @@ namespace AcmeGlobalCollege.Web.Models
         public string FullName => $"{FirstName} {LastName}";
 
         public ICollection<CourseEnrolment> Enrolments { get; set; } = new List<CourseEnrolment>();
-
+        public ICollection<AssignmentResult> AssignmentResults { get; set; } = new List<AssignmentResult>();
+        public ICollection<ExamResult> ExamResults { get; set; } = new List<ExamResult>();
     }
 }

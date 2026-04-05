@@ -30,5 +30,7 @@ namespace AcmeGlobalCollege.Web.Models
         public ICollection<Module> Modules { get; set; } = new List<Module>();
         public ICollection<FacultyCourseAssignment> FacultyAssignments { get; set; } = new List<FacultyCourseAssignment>();
         public ICollection<CourseEnrolment> Enrolments { get; set; } = new List<CourseEnrolment>();
+        public ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+        public ICollection<Exam> Exams { get; set; } = new List<Exam>();
     }
 }
