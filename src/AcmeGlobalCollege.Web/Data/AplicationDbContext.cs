@@ -17,6 +17,8 @@ namespace AcmeGlobalCollege.Web.Data
         public DbSet<StudentProfile> StudentProfiles { get; set; }
         public DbSet<FacultyProfile> FacultyProfiles { get; set; }
         public DbSet<FacultyCourseAssignment> FacultyCourseAssignments { get; set; }
+        public DbSet<CourseEnrolment> CourseEnrolments { get; set; }
+        public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -61,6 +63,24 @@ namespace AcmeGlobalCollege.Web.Data
                 .WithMany(c => c.FacultyAssignments)
                 .HasForeignKey(fca => fca.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CourseEnrolment>()
+                .HasOne(e => e.StudentProfile)
+                .WithMany(s => s.Enrolments)
+                .HasForeignKey(e => e.StudentProfileId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CourseEnrolment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Enrolments)
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<AttendanceRecord>()
+                .HasOne(a => a.CourseEnrolment)
+                .WithMany(e => e.AttendanceRecords)
+                .HasForeignKey(a => a.CourseEnrolmentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

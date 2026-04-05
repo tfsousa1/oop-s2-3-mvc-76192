@@ -28,8 +28,7 @@ namespace AcmeGlobalCollege.Web.Models
         public DateTime EndDate { get; set; }
 
         public ICollection<Module> Modules { get; set; } = new List<Module>();
-
         public ICollection<FacultyCourseAssignment> FacultyAssignments { get; set; } = new List<FacultyCourseAssignment>();
-
+        public ICollection<CourseEnrolment> Enrolments { get; set; } = new List<CourseEnrolment>();
     }
 }
