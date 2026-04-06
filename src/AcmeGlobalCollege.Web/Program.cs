@@ -1,5 +1,6 @@
 using AcmeGlobalCollege.Web.Data;
 using AcmeGlobalCollege.Web.Models;
+using AcmeGlobalCollege.Web.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -38,6 +39,10 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Seed database
+await DbInitializer.SeedAsync(app.Services);
+
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
