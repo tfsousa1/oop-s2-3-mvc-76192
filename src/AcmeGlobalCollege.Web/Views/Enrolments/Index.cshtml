@@ -1,0 +1,60 @@
+@model IEnumerable<AcmeGlobalCollege.Web.Models.CourseEnrolment>
+
+@{
+    ViewData["Title"] = "Enrolments";
+}
+
+<section class="agc-hero agc-hero-small">
+    <div class="container">
+        <span class="agc-eyebrow">Administrator Area</span>
+        <h1 class="agc-title">Enrolments</h1>
+        <p class="agc-subtitle">
+            View all student enrolments across courses and branches.
+        </p>
+    </div>
+</section>
+
+<section class="agc-section">
+    <div class="container">
+        <div class="agc-card">
+
+            <h4 class="mb-3">Enrolment List</h4>
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table agc-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Student Number</th>
+                                <th>Course</th>
+                                <th>Branch</th>
+                                <th>Enrolment Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var e in Model)
+                            {
+                                <tr>
+                                    <td>@e.StudentProfile?.FullName</td>
+                                    <td>@e.StudentProfile?.StudentNumber</td>
+                                    <td>@e.Course?.Name</td>
+                                    <td>@e.Course?.Branch?.Name</td>
+                                    <td>@e.EnrolDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@e.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No enrolments found.</p>
+            }
+
+        </div>
+    </div>
+</section>

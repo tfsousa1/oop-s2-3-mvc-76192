@@ -52,10 +52,12 @@
             </div>
 
             <div class="col-md-6 col-xl-3">
-                <div class="agc-card h-100">
-                    <h5>Enrolments</h5>
-                    <p class="agc-stat">@Model.TotalEnrolments</p>
-                </div>
+                <a asp-controller="Enrolments" asp-action="Index" class="agc-card-link">
+                    <div class="agc-card h-100">
+                        <h5>Enrolments</h5>
+                        <p class="agc-stat">@Model.TotalEnrolments</p>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
