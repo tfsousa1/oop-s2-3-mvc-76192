@@ -2,52 +2,79 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-5 fw-bold">Acme Global College</h1>
-    <p class="lead mt-3">
-        Multi-Branch Student & Course Management System
-    </p>
-    <p class="text-muted">
-        A secure academic platform for managing student records, course structures, attendance and assessment information across multiple branches in Ireland.
-    </p>
-</div>
+<section class="agc-hero">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-7">
+                <span class="agc-eyebrow">Academic Portal</span>
+                <h1 class="agc-title">Acme Global College</h1>
 
-<div class="row mt-5 g-4">
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100 p-3">
-            <h5>Administrators</h5>
-            <p>
-                Manage branches, courses, modules, enrolments, staff assignments and result release settings.
-            </p>
+                <p class="agc-subtitle">
+                    Multi-branch academic system supporting students, faculty and administrators across Ireland.
+                </p>
+
+                <p class="agc-text">
+                    Access to academic records, enrolments and course structures is securely managed through authenticated user accounts.
+                </p>
+
+                <a class="btn agc-btn-primary mt-2"
+                   asp-area="Identity"
+                   asp-page="/Account/Login">
+                   Login to Academic Portal
+                </a>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="agc-panel">
+                    <h3>Our Campuses</h3>
+                    <ul class="agc-list">
+                        <li>Dublin City</li>
+                        <li>Tallaght</li>
+                        <li>Blanchardstown</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100 p-3">
-            <h5>Faculty</h5>
-            <p>
-                Access course-related student information, attendance and academic results based on assigned teaching responsibilities.
+<section class="agc-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="agc-section-title">Academic Programmes</h2>
+            <p class="agc-section-text">
+                A focused range of undergraduate programmes delivered across multiple disciplines.
             </p>
         </div>
-    </div>
 
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100 p-3">
-            <h5>Students</h5>
-            <p>
-                View personal academic records, enrolments, attendance and released assessment results through secure login.
-            </p>
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="agc-card h-100">
+                    <h5>Computer Science</h5>
+                    <p>Software development, cybersecurity and computing systems.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="agc-card h-100">
+                    <h5>Pharmaceutical Science</h5>
+                    <p>Chemistry, pharmacology and laboratory-based research.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="agc-card h-100">
+                    <h5>Biological Sciences</h5>
+                    <p>Ecology, genetics and life sciences education.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="agc-card h-100">
+                    <h5>Engineering</h5>
+                    <p>Mechanical systems, manufacturing and applied design.</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm p-4">
-            <h5 class="mb-3">Secure Access</h5>
-            <p class="mb-0">
-                Access to information is controlled by authentication and role-based authorization. Users only see the data relevant to their own role and permissions.
-            </p>
-        </div>
-    </div>
-</div>
+</section>
