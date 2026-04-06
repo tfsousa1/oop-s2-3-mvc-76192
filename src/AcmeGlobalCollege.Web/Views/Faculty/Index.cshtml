@@ -1,0 +1,68 @@
+@model IEnumerable<AcmeGlobalCollege.Web.ViewModels.FacultyListItemViewModel>
+
+@{
+    ViewData["Title"] = "Faculty";
+}
+
+<section class="agc-hero agc-hero-small">
+    <div class="container">
+        <span class="agc-eyebrow">Administrator Area</span>
+        <h1 class="agc-title">Faculty</h1>
+        <p class="agc-subtitle">
+            View faculty profiles and their assigned academic responsibilities.
+        </p>
+    </div>
+</section>
+
+<section class="agc-section">
+    <div class="container">
+        <div class="agc-card">
+            <h4 class="mb-3">Faculty List</h4>
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table agc-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Assigned Courses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var faculty in Model)
+                            {
+                                <tr>
+                                    <td>@faculty.FullName</td>
+                                    <td>@faculty.Email</td>
+                                    <td>@faculty.Phone</td>
+                                    <td>
+                                        @if (faculty.AssignedCourses.Any())
+                                        {
+                                            <ul class="mb-0 ps-3">
+                                                @foreach (var course in faculty.AssignedCourses)
+                                                {
+                                                    <li>@course</li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">No assignments</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No faculty profiles found.</p>
+            }
+        </div>
+    </div>
+</section>

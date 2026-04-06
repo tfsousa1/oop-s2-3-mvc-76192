@@ -16,12 +16,13 @@
                     Acme Global College
                 </a>
 
-                <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarMain">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
@@ -33,12 +34,19 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Branches" asp-action="Index">Branches</a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a>
                                 </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Students" asp-action="Index">Students</a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Faculty" asp-action="Index">Faculty</a>
+                                </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Enrolments" asp-action="Index">Enrolments</a>
                                 </li>
