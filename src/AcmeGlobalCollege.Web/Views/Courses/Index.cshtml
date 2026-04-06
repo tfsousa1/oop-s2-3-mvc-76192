@@ -37,7 +37,14 @@
                             @foreach (var course in Model)
                             {
                                 <tr>
-                                    <td>@course.Name</td>
+                                    <td>
+                                        <a asp-controller="Courses"
+                                           asp-action="Details"
+                                           asp-route-id="@course.Id"
+                                           class="agc-table-link">
+                                            @course.Name
+                                        </a>
+                                    </td>
                                     <td>@course.Branch?.Name</td>
                                     <td>@course.StartDate.ToString("dd/MM/yyyy")</td>
                                     <td>@course.EndDate.ToString("dd/MM/yyyy")</td>

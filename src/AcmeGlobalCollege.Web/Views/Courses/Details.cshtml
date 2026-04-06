@@ -1,0 +1,153 @@
+﻿@model AcmeGlobalCollege.Web.ViewModels.CourseDetailsViewModel
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<section class="agc-hero agc-hero-small">
+    <div class="container">
+        <span class="agc-eyebrow">Administrator Area</span>
+        <h1 class="agc-title">@Model.Course.Name</h1>
+        <p class="agc-subtitle">
+            Course structure, faculty assignments and enrolled students.
+        </p>
+    </div>
+</section>
+
+<section class="agc-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="agc-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Course Profile</h4>
+                        <a asp-controller="Courses" asp-action="Index" class="btn btn-sm agc-btn-outline">Back to Courses</a>
+                    </div>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Course</dt>
+                        <dd class="col-sm-8">@Model.Course.Name</dd>
+
+                        <dt class="col-sm-4">Branch</dt>
+                        <dd class="col-sm-8">@Model.Course.Branch?.Name</dd>
+
+                        <dt class="col-sm-4">Start Date</dt>
+                        <dd class="col-sm-8">@Model.Course.StartDate.ToString("dd/MM/yyyy")</dd>
+
+                        <dt class="col-sm-4">End Date</dt>
+                        <dd class="col-sm-8">@Model.Course.EndDate.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="agc-card h-100">
+                    <h4 class="mb-3">Modules</h4>
+
+                    @if (Model.Modules.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table agc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Module</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var module in Model.Modules)
+                                    {
+                                        <tr>
+                                            <td>@module.Name</td>
+                                            <td>@module.Description</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No modules found for this course.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="agc-section pt-0">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="agc-card h-100">
+                    <h4 class="mb-3">Faculty Assignments</h4>
+
+                    @if (Model.FacultyAssignments.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table agc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Faculty</th>
+                                        <th>Tutor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var assignment in Model.FacultyAssignments)
+                                    {
+                                        <tr>
+                                            <td>@assignment.FacultyProfile?.FullName</td>
+                                            <td>@(assignment.IsTutor ? "Yes" : "No")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No faculty assignments found for this course.</p>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="agc-card h-100">
+                    <h4 class="mb-3">Enrolled Students</h4>
+
+                    @if (Model.Enrolments.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table agc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Student Number</th>
+                                        <th>Enrolment Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var enrolment in Model.Enrolments)
+                                    {
+                                        <tr>
+                                            <td>@enrolment.StudentProfile?.FullName</td>
+                                            <td>@enrolment.StudentProfile?.StudentNumber</td>
+                                            <td>@enrolment.EnrolDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@enrolment.Status</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No students are currently enrolled in this course.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

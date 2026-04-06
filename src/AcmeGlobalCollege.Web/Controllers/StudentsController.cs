@@ -38,7 +38,7 @@ namespace AcmeGlobalCollege.Web.Controllers
 
             var enrolments = await _context.CourseEnrolments
                 .Include(e => e.Course)
-                .ThenInclude(c => c.Branch)
+                .ThenInclude(c => c!.Branch)
                 .Where(e => e.StudentProfileId == id)
                 .OrderByDescending(e => e.EnrolDate)
                 .ToListAsync();
