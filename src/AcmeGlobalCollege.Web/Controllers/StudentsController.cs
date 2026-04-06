@@ -1,4 +1,5 @@
 ﻿using AcmeGlobalCollege.Web.Data;
+using AcmeGlobalCollege.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,32 @@ namespace AcmeGlobalCollege.Web.Controllers
                 .ToListAsync();
 
             return View(students);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var student = await _context.StudentProfiles
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var enrolments = await _context.CourseEnrolments
+                .Include(e => e.Course)
+                .ThenInclude(c => c.Branch)
+                .Where(e => e.StudentProfileId == id)
+                .OrderByDescending(e => e.EnrolDate)
+                .ToListAsync();
+
+            var viewModel = new StudentDetailsViewModel
+            {
+                Student = student,
+                Enrolments = enrolments
+            };
+
+            return View(viewModel);
         }
     }
 }

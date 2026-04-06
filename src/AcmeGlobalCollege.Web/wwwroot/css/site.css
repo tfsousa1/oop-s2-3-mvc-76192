@@ -1,23 +1,10 @@
-.agc-card-link {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-    .agc-card-link:hover {
-        text-decoration: none;
-        color: inherit;
-    }
-
-.agc-btn-outline {
-    border: 1px solid #184a8c;
+.agc-table-link {
     color: #184a8c;
-    background-color: transparent;
-    border-radius: 0.6rem;
     font-weight: 600;
+    text-decoration: none;
 }
 
-    .agc-btn-outline:hover {
-        background-color: #184a8c;
-        color: #ffffff;
+    .agc-table-link:hover {
+        color: #123968;
+        text-decoration: underline;
     }

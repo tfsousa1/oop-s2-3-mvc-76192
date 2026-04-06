@@ -39,7 +39,14 @@
                             {
                                 <tr>
                                     <td>@student.StudentNumber</td>
-                                    <td>@student.FullName</td>
+                                    <td>
+                                        <a asp-controller="Students"
+                                           asp-action="Details"
+                                           asp-route-id="@student.Id"
+                                           class="agc-table-link">
+                                            @student.FullName
+                                        </a>
+                                    </td>
                                     <td>@student.Email</td>
                                     <td>@student.Phone</td>
                                     <td>@student.Address</td>
