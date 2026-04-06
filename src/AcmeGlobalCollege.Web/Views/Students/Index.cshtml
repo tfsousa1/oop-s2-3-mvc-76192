@@ -1,0 +1,58 @@
+﻿@model IEnumerable<AcmeGlobalCollege.Web.Models.StudentProfile>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<section class="agc-hero agc-hero-small">
+    <div class="container">
+        <span class="agc-eyebrow">Administrator Area</span>
+        <h1 class="agc-title">Students</h1>
+        <p class="agc-subtitle">
+            View student profiles and core academic identity information.
+        </p>
+    </div>
+</section>
+
+<section class="agc-section">
+    <div class="container">
+        <div class="agc-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Student List</h4>
+            </div>
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table agc-table">
+                        <thead>
+                            <tr>
+                                <th>Student Number</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr>
+                                    <td>@student.StudentNumber</td>
+                                    <td>@student.FullName</td>
+                                    <td>@student.Email</td>
+                                    <td>@student.Phone</td>
+                                    <td>@student.Address</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted mb-0">No students found.</p>
+            }
+        </div>
+    </div>
+</section>

@@ -43,10 +43,12 @@
             </div>
 
             <div class="col-md-6 col-xl-3">
-                <div class="agc-card h-100">
-                    <h5>Students</h5>
-                    <p class="agc-stat">@Model.TotalStudents</p>
-                </div>
+                <a asp-controller="Students" asp-action="Index" class="agc-card-link">
+                    <div class="agc-card h-100">
+                        <h5>Students</h5>
+                        <p class="agc-stat">@Model.TotalStudents</p>
+                    </div>
+                </a>
             </div>
 
             <div class="col-md-6 col-xl-3">
