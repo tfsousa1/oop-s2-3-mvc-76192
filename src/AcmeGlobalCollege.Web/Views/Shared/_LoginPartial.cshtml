@@ -3,24 +3,22 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-            Hello @User.Identity?.Name!
-        </a>
-    </li>
-    <li class="nav-item">
-        <form class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="btn btn-link nav-link text-white text-decoration-none border-0 p-0 ms-3">Logout</button>
+<div class="d-flex align-items-center agc-auth-area">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <span class="agc-user-label me-3">
+            @User.Identity?.Name
+        </span>
+
+        <form asp-area="Identity"
+              asp-page="/Account/Logout"
+              asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+              class="mb-0">
+            <button type="submit" class="btn agc-logout-btn">Logout</button>
         </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
-</ul>
+    }
+    else
+    {
+        <a class="btn agc-login-btn" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    }
+</div>
