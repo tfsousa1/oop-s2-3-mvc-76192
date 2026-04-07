@@ -1,0 +1,64 @@
+@model AcmeGlobalCollege.Web.ViewModels.CreateEnrolmentViewModel
+
+@{
+    ViewData["Title"] = "Create Enrolment";
+}
+
+<section class="agc-hero agc-hero-small">
+    <div class="container">
+        <span class="agc-eyebrow">Administrator Area</span>
+        <h1 class="agc-title">Create Enrolment</h1>
+        <p class="agc-subtitle">
+            Register a student on a course offering.
+        </p>
+    </div>
+</section>
+
+<section class="agc-section">
+    <div class="container">
+        <div class="agc-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">New Enrolment</h4>
+                <a asp-controller="Enrolments" asp-action="Index" class="btn agc-btn-outline">Back to Enrolments</a>
+            </div>
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="StudentProfileId" class="form-label"></label>
+                    <select asp-for="StudentProfileId" asp-items="Model.Students" class="form-select">
+                        <option value="">-- Select student --</option>
+                    </select>
+                    <span asp-validation-for="StudentProfileId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CourseId" class="form-label"></label>
+                    <select asp-for="CourseId" asp-items="Model.Courses" class="form-select">
+                        <option value="">-- Select course --</option>
+                    </select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="EnrolDate" class="form-label"></label>
+                    <input asp-for="EnrolDate" class="form-control" />
+                    <span asp-validation-for="EnrolDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Status" class="form-label"></label>
+                    <input asp-for="Status" class="form-control" />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn agc-btn-primary">Save Enrolment</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

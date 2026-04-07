@@ -11,18 +11,18 @@ namespace AcmeGlobalCollege.Web.Data
         {
         }
 
-        public DbSet<Branch> Branches { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Module> Modules { get; set; }
-        public DbSet<StudentProfile> StudentProfiles { get; set; }
-        public DbSet<FacultyProfile> FacultyProfiles { get; set; }
-        public DbSet<FacultyCourseAssignment> FacultyCourseAssignments { get; set; }
-        public DbSet<CourseEnrolment> CourseEnrolments { get; set; }
-        public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
-        public DbSet<Assignment> Assignments { get; set; }
-        public DbSet<AssignmentResult> AssignmentResults { get; set; }
-        public DbSet<Exam> Exams { get; set; }
-        public DbSet<ExamResult> ExamResults { get; set; }
+        public DbSet<Branch> Branches { get; set; } = default!;
+        public DbSet<Course> Courses { get; set; } = default!;
+        public DbSet<Module> Modules { get; set; } = default!;
+        public DbSet<StudentProfile> StudentProfiles { get; set; } = default!;
+        public DbSet<FacultyProfile> FacultyProfiles { get; set; } = default!;
+        public DbSet<FacultyCourseAssignment> FacultyCourseAssignments { get; set; } = default!;
+        public DbSet<CourseEnrolment> CourseEnrolments { get; set; } = default!;
+        public DbSet<AttendanceRecord> AttendanceRecords { get; set; } = default!;
+        public DbSet<Assignment> Assignments { get; set; } = default!;
+        public DbSet<AssignmentResult> AssignmentResults { get; set; } = default!;
+        public DbSet<Exam> Exams { get; set; } = default!;
+        public DbSet<ExamResult> ExamResults { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
