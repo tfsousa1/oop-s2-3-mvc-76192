@@ -2,11 +2,43 @@
 
 @{
     ViewData["Title"] = "Student Dashboard";
-}<
+    var totalEnrolments = Model.Enrolments.Count;
+    var activeEnrolments = Model.Enrolments.Count(e => e.Status == "Active");
+}
+
 <div class="mb-4">
     <div class="text-muted small">Student Area</div>
     <h1 class="display-5 fw-bold">Student Dashboard</h1>
     <p class="lead mb-0">View your profile information and your current enrolments.</p>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Student Number</div>
+                <div class="fs-4 fw-bold">@Model.Student.StudentNumber</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Enrolments</div>
+                <div class="fs-4 fw-bold">@totalEnrolments</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <div class="text-muted small">Active Enrolments</div>
+                <div class="fs-4 fw-bold">@activeEnrolments</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="card shadow-sm mb-4">
@@ -70,10 +102,18 @@
                                         </ul>
                                     }
                                 </td>
-
                                 <td>@enrolment.Course?.Branch?.Name</td>
                                 <td>@enrolment.EnrolDate.ToString("dd/MM/yyyy")</td>
-                                <td>@enrolment.Status</td>
+                                <td>
+                                    @if (enrolment.Status == "Active")
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@enrolment.Status</span>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>

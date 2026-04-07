@@ -135,7 +135,7 @@ namespace AcmeGlobalCollege.Web.Controllers
                 .Include(e => e.Course)
                     .ThenInclude(c => c!.Branch)
                 .Include(e => e.Course)
-                    .ThenInclude(c => c!.Modules) // 👈 ADD THIS
+                    .ThenInclude(c => c!.Modules)
                 .Where(e => e.StudentProfileId == studentProfile.Id)
                 .OrderByDescending(e => e.EnrolDate)
                 .ToListAsync();
