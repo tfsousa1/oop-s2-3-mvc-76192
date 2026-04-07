@@ -2,8 +2,7 @@
 
 @{
     ViewData["Title"] = "Student Dashboard";
-}
-
+}<
 <div class="mb-4">
     <div class="text-muted small">Student Area</div>
     <h1 class="display-5 fw-bold">Student Dashboard</h1>
@@ -55,15 +54,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var enrolment in Model.Enrolments)
-                    {
-                        <tr>
-                            <td>@enrolment.Course?.Name</td>
-                            <td>@enrolment.Course?.Branch?.Name</td>
-                            <td>@enrolment.EnrolDate.ToString("dd/MM/yyyy")</td>
-                            <td>@enrolment.Status</td>
-                        </tr>
-                    }
+                        @foreach (var enrolment in Model.Enrolments)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@enrolment.Course?.Name</strong>
+
+                                    @if (enrolment.Course?.Modules?.Any() == true)
+                                    {
+                                        <ul class="mb-0 small text-muted">
+                                            @foreach (var module in enrolment.Course.Modules)
+                                            {
+                                                <li>@module.Name</li>
+                                            }
+                                        </ul>
+                                    }
+                                </td>
+
+                                <td>@enrolment.Course?.Branch?.Name</td>
+                                <td>@enrolment.EnrolDate.ToString("dd/MM/yyyy")</td>
+                                <td>@enrolment.Status</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

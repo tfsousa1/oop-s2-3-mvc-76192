@@ -134,6 +134,8 @@ namespace AcmeGlobalCollege.Web.Controllers
             var enrolments = await _context.CourseEnrolments
                 .Include(e => e.Course)
                     .ThenInclude(c => c!.Branch)
+                .Include(e => e.Course)
+                    .ThenInclude(c => c!.Modules) // 👈 ADD THIS
                 .Where(e => e.StudentProfileId == studentProfile.Id)
                 .OrderByDescending(e => e.EnrolDate)
                 .ToListAsync();
