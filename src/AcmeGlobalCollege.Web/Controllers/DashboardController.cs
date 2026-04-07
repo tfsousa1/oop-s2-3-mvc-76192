@@ -112,11 +112,39 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(viewModel);
         }
 
-        // Placeholder dashboard for student role.
+        // Shows the current student's own profile and enrolments.
         [Authorize(Roles = "Student")]
-        public IActionResult Student()
+        public async Task<IActionResult> Student()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var studentProfile = await _context.StudentProfiles
+                .FirstOrDefaultAsync(s => s.IdentityUserId == userId);
+
+            if (studentProfile == null)
+            {
+                return NotFound();
+            }
+
+            var enrolments = await _context.CourseEnrolments
+                .Include(e => e.Course)
+                    .ThenInclude(c => c!.Branch)
+                .Where(e => e.StudentProfileId == studentProfile.Id)
+                .OrderByDescending(e => e.EnrolDate)
+                .ToListAsync();
+
+            var viewModel = new StudentDashboardViewModel
+            {
+                Student = studentProfile,
+                Enrolments = enrolments
+            };
+
+            return View(viewModel);
         }
     }
 }
