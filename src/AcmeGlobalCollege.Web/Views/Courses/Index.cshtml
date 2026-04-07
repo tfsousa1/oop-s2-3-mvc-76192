@@ -4,60 +4,56 @@
     ViewData["Title"] = "Courses";
 }
 
-<section class="agc-hero agc-hero-small">
-    <div class="container">
-        <span class="agc-eyebrow">Administrator Area</span>
-        <h1 class="agc-title">Courses</h1>
-        <p class="agc-subtitle">
-            View academic programmes and their branch allocation across the institution.
-        </p>
+<div class="mb-4">
+    <div class="text-muted small">Administrator Area</div>
+    <h1 class="display-5 fw-bold">Courses</h1>
+    <p class="lead mb-0">View academic programmes across all branches.</p>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Course List</h2>
     </div>
-</section>
-
-<section class="agc-section">
-    <div class="container">
-        <div class="agc-card">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">Course List</h4>
-            </div>
-
-            @if (Model.Any())
-            {
-                <div class="table-responsive">
-                    <table class="table agc-table">
-                        <thead>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Branch</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var course in Model)
+                        {
                             <tr>
-                                <th>Course</th>
-                                <th>Branch</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <td>@course.Name</td>
+                                <td>@course.Branch?.Name</td>
+                                <td>@course.StartDate.ToString("dd/MM/yyyy")</td>
+                                <td>@course.EndDate.ToString("dd/MM/yyyy")</td>
+                                <td class="text-end">
+                                    <a asp-action="Details"
+                                       asp-route-id="@course.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        View
+                                    </a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var course in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <a asp-controller="Courses"
-                                           asp-action="Details"
-                                           asp-route-id="@course.Id"
-                                           class="agc-table-link">
-                                            @course.Name
-                                        </a>
-                                    </td>
-                                    <td>@course.Branch?.Name</td>
-                                    <td>@course.StartDate.ToString("dd/MM/yyyy")</td>
-                                    <td>@course.EndDate.ToString("dd/MM/yyyy")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-            else
-            {
-                <p class="text-muted mb-0">No courses found.</p>
-            }
-        </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info mb-0">
+                No courses found.
+            </div>
+        }
     </div>
-</section>
+</div>

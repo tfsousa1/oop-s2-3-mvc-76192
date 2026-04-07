@@ -16,6 +16,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context = context;
         }
 
+        // Lists all courses for the administrator.
         public async Task<IActionResult> Index()
         {
             var courses = await _context.Courses
@@ -26,28 +27,18 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(courses);
         }
 
+        // Shows one course with branch, modules and linked enrolments.
         public async Task<IActionResult> Details(int id)
         {
             var course = await _context.Courses
                 .Include(c => c.Branch)
+                .Include(c => c.Modules)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)
             {
                 return NotFound();
             }
-
-            var modules = await _context.Modules
-                .Where(m => m.CourseId == id)
-                .OrderBy(m => m.Name)
-                .ToListAsync();
-
-            var facultyAssignments = await _context.FacultyCourseAssignments
-                .Include(fca => fca.FacultyProfile)
-                .Where(fca => fca.CourseId == id)
-                .OrderBy(fca => fca.FacultyProfile!.LastName)
-                .ThenBy(fca => fca.FacultyProfile!.FirstName)
-                .ToListAsync();
 
             var enrolments = await _context.CourseEnrolments
                 .Include(e => e.StudentProfile)
@@ -59,8 +50,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             var viewModel = new CourseDetailsViewModel
             {
                 Course = course,
-                Modules = modules,
-                FacultyAssignments = facultyAssignments,
+                Modules = course.Modules.OrderBy(m => m.Name).ToList(),
                 Enrolments = enrolments
             };
 
