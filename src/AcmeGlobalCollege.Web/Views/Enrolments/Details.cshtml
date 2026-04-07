@@ -1,0 +1,46 @@
+@model AcmeGlobalCollege.Web.Models.CourseEnrolment
+
+@{
+    ViewData["Title"] = "Enrolment Details";
+}
+
+<div class="mb-4">
+    <div class="text-muted small">Administrator Area</div>
+    <h1 class="display-5 fw-bold">Enrolment Details</h1>
+    <p class="lead mb-0">View the full relationship between the student and the selected course.</p>
+</div>
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">Back to Enrolments</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Enrolment Record</h2>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Student</dt>
+            <dd class="col-sm-9">
+                <a asp-controller="Students" asp-action="Details" asp-route-id="@Model.StudentProfileId">
+                    @Model.StudentProfile?.FullName
+                </a>
+            </dd>
+
+            <dt class="col-sm-3">Student Number</dt>
+            <dd class="col-sm-9">@Model.StudentProfile?.StudentNumber</dd>
+
+            <dt class="col-sm-3">Course</dt>
+            <dd class="col-sm-9">@Model.Course?.Name</dd>
+
+            <dt class="col-sm-3">Branch</dt>
+            <dd class="col-sm-9">@Model.Course?.Branch?.Name</dd>
+
+            <dt class="col-sm-3">Enrolment Date</dt>
+            <dd class="col-sm-9">@Model.EnrolDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+    </div>
+</div>

@@ -18,6 +18,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context = context;
         }
 
+        // Lists all enrolments with student and course information.
         public async Task<IActionResult> Index()
         {
             var enrolments = await _context.CourseEnrolments
@@ -30,34 +31,33 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(enrolments);
         }
 
+        // Shows one enrolment in a dedicated details page.
+        public async Task<IActionResult> Details(int id)
+        {
+            var enrolment = await _context.CourseEnrolments
+                .Include(e => e.StudentProfile)
+                .Include(e => e.Course)
+                    .ThenInclude(c => c!.Branch)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (enrolment == null)
+            {
+                return NotFound();
+            }
+
+            return View(enrolment);
+        }
+
+        // Loads dropdowns for the create page.
         public async Task<IActionResult> Create()
         {
-            var viewModel = new CreateEnrolmentViewModel
-            {
-                Students = await _context.StudentProfiles
-                    .OrderBy(s => s.LastName)
-                    .ThenBy(s => s.FirstName)
-                    .Select(s => new SelectListItem
-                    {
-                        Value = s.Id.ToString(),
-                        Text = $"{s.FullName} ({s.StudentNumber})"
-                    })
-                    .ToListAsync(),
-
-                Courses = await _context.Courses
-                    .Include(c => c.Branch)
-                    .OrderBy(c => c.Name)
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = $"{c.Name} - {c.Branch!.Name}"
-                    })
-                    .ToListAsync()
-            };
+            var viewModel = new CreateEnrolmentViewModel();
+            await PopulateCreateListsAsync(viewModel);
 
             return View(viewModel);
         }
 
+        // Saves a new enrolment and prevents duplicate active enrolments.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateEnrolmentViewModel viewModel)
@@ -72,26 +72,7 @@ namespace AcmeGlobalCollege.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                viewModel.Students = await _context.StudentProfiles
-                    .OrderBy(s => s.LastName)
-                    .ThenBy(s => s.FirstName)
-                    .Select(s => new SelectListItem
-                    {
-                        Value = s.Id.ToString(),
-                        Text = $"{s.FullName} ({s.StudentNumber})"
-                    })
-                    .ToListAsync();
-
-                viewModel.Courses = await _context.Courses
-                    .Include(c => c.Branch)
-                    .OrderBy(c => c.Name)
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = $"{c.Name} - {c.Branch!.Name}"
-                    })
-                    .ToListAsync();
-
+                await PopulateCreateListsAsync(viewModel);
                 return View(viewModel);
             }
 
@@ -106,7 +87,31 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context.CourseEnrolments.Add(enrolment);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = enrolment.Id });
+        }
+
+        // Rebuilds dropdown lists when the form is loaded or validation fails.
+        private async Task PopulateCreateListsAsync(CreateEnrolmentViewModel viewModel)
+        {
+            viewModel.Students = await _context.StudentProfiles
+                .OrderBy(s => s.LastName)
+                .ThenBy(s => s.FirstName)
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = $"{s.FullName} ({s.StudentNumber})"
+                })
+                .ToListAsync();
+
+            viewModel.Courses = await _context.Courses
+                .Include(c => c.Branch)
+                .OrderBy(c => c.Name)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = $"{c.Name} - {c.Branch!.Name}"
+                })
+                .ToListAsync();
         }
     }
 }

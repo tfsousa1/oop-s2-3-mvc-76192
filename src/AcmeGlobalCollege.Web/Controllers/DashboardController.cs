@@ -16,6 +16,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context = context;
         }
 
+        // Redirects each logged-in user to the correct dashboard.
         public IActionResult Index()
         {
             if (User.IsInRole("Admin"))
@@ -36,6 +37,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // Shows summary data for the administrator dashboard.
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Admin()
         {
@@ -58,12 +60,14 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(viewModel);
         }
 
+        // Shows the faculty dashboard page.
         [Authorize(Roles = "Faculty")]
         public IActionResult Faculty()
         {
             return View();
         }
 
+        // Shows the student dashboard page.
         [Authorize(Roles = "Student")]
         public IActionResult Student()
         {

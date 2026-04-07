@@ -1,4 +1,4 @@
-﻿using AcmeGlobalCollege.Web.Data;
+using AcmeGlobalCollege.Web.Data;
 using AcmeGlobalCollege.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +16,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context = context;
         }
 
+        // Lists all students for the administrator.
         public async Task<IActionResult> Index()
         {
             var students = await _context.StudentProfiles
@@ -26,6 +27,7 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(students);
         }
 
+        // Shows one student and all linked enrolments.
         public async Task<IActionResult> Details(int id)
         {
             var student = await _context.StudentProfiles
@@ -38,7 +40,7 @@ namespace AcmeGlobalCollege.Web.Controllers
 
             var enrolments = await _context.CourseEnrolments
                 .Include(e => e.Course)
-                .ThenInclude(c => c!.Branch)
+                    .ThenInclude(c => c!.Branch)
                 .Where(e => e.StudentProfileId == id)
                 .OrderByDescending(e => e.EnrolDate)
                 .ToListAsync();
