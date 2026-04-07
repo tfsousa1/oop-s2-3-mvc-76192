@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AcmeGlobalCollege.Web.Data;
 using AcmeGlobalCollege.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AcmeGlobalCollege.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Faculty")]
     public class StudentsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,18 +17,58 @@ namespace AcmeGlobalCollege.Web.Controllers
             _context = context;
         }
 
-        // Lists all students for the administrator.
+        // Lists students based on the current user's role.
         public async Task<IActionResult> Index()
         {
-            var students = await _context.StudentProfiles
-                .OrderBy(s => s.LastName)
-                .ThenBy(s => s.FirstName)
-                .ToListAsync();
+            if (User.IsInRole("Admin"))
+            {
+                var allStudents = await _context.StudentProfiles
+                    .OrderBy(s => s.LastName)
+                    .ThenBy(s => s.FirstName)
+                    .ToListAsync();
 
-            return View(students);
+                return View(allStudents);
+            }
+
+            if (User.IsInRole("Faculty"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return Challenge();
+                }
+
+                var facultyProfile = await _context.FacultyProfiles
+                    .FirstOrDefaultAsync(f => f.IdentityUserId == userId);
+
+                if (facultyProfile == null)
+                {
+                    return NotFound();
+                }
+
+                var assignedCourseIds = await _context.FacultyCourseAssignments
+                    .Where(fca => fca.FacultyProfileId == facultyProfile.Id)
+                    .Select(fca => fca.CourseId)
+                    .Distinct()
+                    .ToListAsync();
+
+                var students = await _context.CourseEnrolments
+                    .Include(e => e.StudentProfile)
+                    .Where(e => assignedCourseIds.Contains(e.CourseId))
+                    .Select(e => e.StudentProfile!)
+                    .Distinct()
+                    .OrderBy(s => s.LastName)
+                    .ThenBy(s => s.FirstName)
+                    .ToListAsync();
+
+                return View(students);
+            }
+
+            return Forbid();
         }
 
-        // Shows one student and all linked enrolments.
+        // Shows student details only when the current user is allowed to access them.
         public async Task<IActionResult> Details(int id)
         {
             var student = await _context.StudentProfiles
@@ -36,6 +77,36 @@ namespace AcmeGlobalCollege.Web.Controllers
             if (student == null)
             {
                 return NotFound();
+            }
+
+            if (User.IsInRole("Faculty"))
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return Challenge();
+                }
+
+                var facultyProfile = await _context.FacultyProfiles
+                    .FirstOrDefaultAsync(f => f.IdentityUserId == userId);
+
+                if (facultyProfile == null)
+                {
+                    return NotFound();
+                }
+
+                var isLinkedStudent = await _context.CourseEnrolments
+                    .AnyAsync(e =>
+                        e.StudentProfileId == id &&
+                        _context.FacultyCourseAssignments.Any(fca =>
+                            fca.FacultyProfileId == facultyProfile.Id &&
+                            fca.CourseId == e.CourseId));
+
+                if (!isLinkedStudent)
+                {
+                    return Forbid();
+                }
             }
 
             var enrolments = await _context.CourseEnrolments

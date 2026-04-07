@@ -5,7 +5,9 @@
 }
 
 <div class="mb-4">
-    <div class="text-muted small">Administrator Area</div>
+    <div class="text-muted small">
+        @(User.IsInRole("Admin") ? "Administrator Area" : "Faculty Area")
+    </div>
     <h1 class="display-5 fw-bold">Student Details</h1>
     <p class="lead mb-0">Student profile, contact details and linked enrolment information.</p>
 </div>

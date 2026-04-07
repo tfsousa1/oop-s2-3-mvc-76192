@@ -1,40 +1,98 @@
-﻿@{
+﻿@model AcmeGlobalCollege.Web.ViewModels.FacultyDashboardViewModel
+
+@{
     ViewData["Title"] = "Faculty Dashboard";
 }
 
-<section class="agc-hero agc-hero-small">
-    <div class="container">
-        <span class="agc-eyebrow">Faculty Area</span>
-        <h1 class="agc-title">Faculty Dashboard</h1>
-        <p class="agc-subtitle">
-            Access teaching-related academic records and student information for assigned courses.
-        </p>
+<div class="mb-4">
+    <div class="text-muted small">Faculty Area</div>
+    <h1 class="display-5 fw-bold">Faculty Dashboard</h1>
+    <p class="lead mb-0">Welcome, @Model.FacultyName. This page shows your assigned courses and students.</p>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Assigned Courses</h2>
     </div>
-</section>
-
-<section class="agc-section">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="agc-card h-100">
-                    <h5>My Courses</h5>
-                    <p>View assigned courses and course structure information.</p>
-                </div>
+    <div class="card-body">
+        @if (Model.CourseAssignments.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Branch</th>
+                            <th>Tutor Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var assignment in Model.CourseAssignments)
+                        {
+                            <tr>
+                                <td>@assignment.Course?.Name</td>
+                                <td>@assignment.Course?.Branch?.Name</td>
+                                <td>@(assignment.IsTutor ? "Yes" : "No")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-
-            <div class="col-md-4">
-                <div class="agc-card h-100">
-                    <h5>My Students</h5>
-                    <p>Access students linked to your teaching responsibilities.</p>
-                </div>
+        }
+        else
+        {
+            <div class="alert alert-info mb-0">
+                No course assignments were found for this faculty member.
             </div>
-
-            <div class="col-md-4">
-                <div class="agc-card h-100">
-                    <h5>Assessments</h5>
-                    <p>Manage attendance, coursework and exam-related academic data.</p>
-                </div>
-            </div>
-        </div>
+        }
     </div>
-</section>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2 class="h5 mb-0">Students in Assigned Courses</h2>
+    </div>
+    <div class="card-body">
+        @if (Model.Enrolments.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Student Number</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var enrolment in Model.Enrolments)
+                        {
+                            <tr>
+                                <td>@enrolment.StudentProfile?.FullName</td>
+                                <td>@enrolment.StudentProfile?.StudentNumber</td>
+                                <td>@enrolment.Course?.Name</td>
+                                <td>@enrolment.Status</td>
+                                <td class="text-end">
+                                    <a asp-controller="Students"
+                                       asp-action="Details"
+                                       asp-route-id="@enrolment.StudentProfileId"
+                                       class="btn btn-sm btn-outline-primary">
+                                        View Student
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info mb-0">
+                No students are currently linked to this faculty dashboard.
+            </div>
+        }
+    </div>
+</div>

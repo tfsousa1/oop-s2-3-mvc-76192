@@ -1,4 +1,5 @@
-﻿using AcmeGlobalCollege.Web.Data;
+﻿using System.Security.Claims;
+using AcmeGlobalCollege.Web.Data;
 using AcmeGlobalCollege.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,14 +61,58 @@ namespace AcmeGlobalCollege.Web.Controllers
             return View(viewModel);
         }
 
-        // Shows the faculty dashboard page.
+        // Shows only the courses and students linked to the logged-in faculty user.
         [Authorize(Roles = "Faculty")]
-        public IActionResult Faculty()
+        public async Task<IActionResult> Faculty()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Challenge();
+            }
+
+            var facultyProfile = await _context.FacultyProfiles
+                .FirstOrDefaultAsync(f => f.IdentityUserId == userId);
+
+            if (facultyProfile == null)
+            {
+                return NotFound();
+            }
+
+            var courseAssignments = await _context.FacultyCourseAssignments
+                .Include(fca => fca.Course)
+                    .ThenInclude(c => c!.Branch)
+                .Where(fca => fca.FacultyProfileId == facultyProfile.Id)
+                .OrderBy(fca => fca.Course!.Name)
+                .ToListAsync();
+
+            var courseIds = courseAssignments
+                .Select(fca => fca.CourseId)
+                .Distinct()
+                .ToList();
+
+            var enrolments = await _context.CourseEnrolments
+                .Include(e => e.StudentProfile)
+                .Include(e => e.Course)
+                    .ThenInclude(c => c!.Branch)
+                .Where(e => courseIds.Contains(e.CourseId))
+                .OrderBy(e => e.Course!.Name)
+                .ThenBy(e => e.StudentProfile!.LastName)
+                .ThenBy(e => e.StudentProfile!.FirstName)
+                .ToListAsync();
+
+            var viewModel = new FacultyDashboardViewModel
+            {
+                FacultyName = $"{facultyProfile.FirstName} {facultyProfile.LastName}",
+                CourseAssignments = courseAssignments,
+                Enrolments = enrolments
+            };
+
+            return View(viewModel);
         }
 
-        // Shows the student dashboard page.
+        // Placeholder dashboard for student role.
         [Authorize(Roles = "Student")]
         public IActionResult Student()
         {
